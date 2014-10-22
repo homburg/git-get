@@ -42,9 +42,9 @@ func main() {
 		runGit()
 	}
 
-	gitGetHost := os.Getenv("GIT_GET_HOST")
-	if gitGetHost == "" {
-		gitGetHost = "github.com"
+	host := os.Getenv("GIT_GET_HOST")
+	if host == "" {
+		host = "github.com"
 	}
 
 	verbose = os.Getenv("GIT_GET_VERBOSE") != ""
@@ -75,10 +75,10 @@ func main() {
 	} else if strings.Count(repo, "/") == 1 {
 		///	# Something from github
 		///	repo_parts = ["github.com"] + repo.split("/")
-		repoParts = []string{gitGetHost}
+		repoParts = []string{host}
 		repoParts = append(repoParts, strings.Split(repo, "/")...)
 		/// repo = "git@github.com:%s.git" % repo
-		repo = fmt.Sprintf("git@%s:%s.git", gitGetHost, repo)
+		repo = fmt.Sprintf("git@%s:%s.git", host, repo)
 		if verbose {
 			log.Println("Did build repo:", repo)
 		}
