@@ -67,6 +67,11 @@ $ git get homburg/tree
 # -> git clone ...; cd $GIT_GET_BASE/github.com/homburg/tree
 ```
 
+## INSPIRATION
+
+- `$ go get` https://golang.org/cmd/go/
+- `$ hub clone homburg/tree` [hub](https://github.com/github/hub) (FKA [gh](https://github.com/jingweno/gh))
+
 ## TODO
 
 - [ ] Retry `ssh` -> `https`
