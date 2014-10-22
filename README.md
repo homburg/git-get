@@ -63,16 +63,6 @@ $ git get homburg/tree
 # -> $HOME/src/bitbucket.org/homburg/tree
 ```
 
-### GIT\_GET\_CD
-
-```bash
-$ GIT_GET_CD=1
-# default: "" (false)
-
-$ git get homburg/tree
-# -> git clone ...; cd $GIT_GET_PATH/github.com/homburg/tree
-```
-
 ## INSPIRATION
 
 - `$ go get` https://golang.org/cmd/go/
@@ -81,6 +71,7 @@ $ git get homburg/tree
 ## TODO
 
 - [ ] Retry `ssh` -> `https`
+- [ ] Cd after clone?
 
 ## LICENSE
 
