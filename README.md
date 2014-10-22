@@ -43,10 +43,10 @@ $ git get homburg/tree
 
 ## OPTIONS
 
-### GIT\_GET\_BASE
+### GIT\_GET\_PATH
 
 ```bash
-$ GIT_GET_BASE="$HOME/src"
+$ GIT_GET_PATH="$HOME/src"
 # default: $HOME/src
 
 $ git get homburg/tree 
@@ -70,7 +70,7 @@ $ GIT_GET_CD=1
 # default: "" (false)
 
 $ git get homburg/tree
-# -> git clone ...; cd $GIT_GET_BASE/github.com/homburg/tree
+# -> git clone ...; cd $GIT_GET_PATH/github.com/homburg/tree
 ```
 
 ## INSPIRATION

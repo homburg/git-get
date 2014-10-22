@@ -49,13 +49,13 @@ func main() {
 
 	verbose = os.Getenv("GIT_GET_VERBOSE") != ""
 
-	gitGetBase := os.Getenv("GIT_GET_BASE")
-	if gitGetBase == "" {
-		gitGetBase = filepath.Join(os.Getenv("HOME"), "src")
+	path := os.Getenv("GIT_GET_PATH")
+	if path == "" {
+		path = filepath.Join(os.Getenv("HOME"), "src")
 	}
 
 	if verbose {
-		log.Println("Using base:", gitGetBase)
+		log.Println("Using base:", path)
 	}
 
 	var repoParts []string
@@ -91,7 +91,7 @@ func main() {
 	///
 
 	targetDir := filepath.Join(repoParts...)
-	targetDir = filepath.Join(gitGetBase, targetDir)
+	targetDir = filepath.Join(path, targetDir)
 
 	if verbose {
 		log.Println("Using target dir:", targetDir)
