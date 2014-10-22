@@ -71,7 +71,7 @@ $ git get homburg/tree
 ## TODO
 
 - [ ] Retry `ssh` -> `https`
-- [ ] Cd after clone?
+- [ ] <del>Cd after clone?</del> (Cannot be done)
 
 ## LICENSE
 
