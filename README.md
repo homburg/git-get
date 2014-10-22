@@ -17,6 +17,12 @@ $ git get homburg/tree
 $ go get git@github.com:homburg/git-get
 ```
 
+## UPDATE
+
+```bash
+$ go get -u git@github.com:homburg/git-get
+```
+
 ## USAGE
 
 Clone to your regular clone dir:
