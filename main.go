@@ -64,7 +64,7 @@ func main() {
 		/// if "@" in repo:
 		if strings.Contains(repo, "@") {
 			///	repo_parts = repo[repo.find("@")+1:].replace(":", "/").split("/")
-			repoParts = strings.Split(strings.Replace(repo[strings.Index(repo, "@")+1:len(repo)-1], ":", "/", -1), "/")
+			repoParts = strings.Split(strings.Replace(repo[strings.Index(repo, "@")+1:len(repo)], ":", "/", -1), "/")
 		} else {
 			///	repo_parts = repo.replace(":", "/").split("/")
 			repoParts = strings.Split(strings.Replace(repo, ":", "/", -1), "/")
