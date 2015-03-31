@@ -1,6 +1,6 @@
 # GIT-GET
 
-[Behold!](https://asciinema.org/a/13272)
+[![asciicast](https://asciinema.org/a/13272.png)](https://asciinema.org/a/13272)
 
 Like `$ go get`. Clone to a default folder hierarchy, ie. shorthand for:
 
