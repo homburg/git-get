@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -10,6 +11,25 @@ import (
 )
 
 var verbose = false
+
+// NoPathError thrown when home path could not automatically be determined
+var NoPathError error
+
+func init() {
+	NoPathError = errors.New("Could not get home path from env vars HOME or USERPROFILE")
+}
+
+func homePath() (string, error) {
+	value := ""
+	for _, key := range []string{"HOME", "USERPROFILE"} {
+		value = os.Getenv(key)
+		if value != "" {
+			return value, nil
+		}
+	}
+
+	return "", NoPathError
+}
 
 func runGit(args ...string) {
 	fullArgs := []string{"git"}
@@ -51,7 +71,11 @@ func main() {
 
 	path := os.Getenv("GIT_GET_PATH")
 	if path == "" {
-		path = filepath.Join(os.Getenv("HOME"), "src")
+		home, err := homePath()
+		if err != nil {
+			log.Fatal(err)
+		}
+		path = filepath.Join(home, "src")
 	}
 
 	if verbose {
