@@ -3,8 +3,10 @@ package main
 import (
 	"errors"
 	"fmt"
+	"io"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
 	"strings"
 	"syscall"
@@ -15,8 +17,22 @@ var verbose = false
 // NoPathError thrown when home path could not automatically be determined
 var NoPathError error
 
+type exitStatusError struct {
+	error
+	exitCode int
+}
+
+func (err exitStatusError) exit() {
+	if err.exitCode != 0 {
+		os.Exit(err.exitCode)
+	} else {
+		log.Fatal(err)
+	}
+}
+
 func init() {
 	NoPathError = errors.New("Could not get home path from env vars HOME or USERPROFILE")
+	log.SetFlags(log.LstdFlags | log.Lshortfile)
 }
 
 func homePath() (string, error) {
@@ -31,22 +47,91 @@ func homePath() (string, error) {
 	return "", NoPathError
 }
 
-func runGit(args ...string) {
-	fullArgs := []string{"git"}
-	fullArgs = append(fullArgs, args...)
+func gitCmd(gitExe string, args []string) *exec.Cmd {
 	if verbose {
-		log.Println("Running:", fullArgs)
+		log.Println("Running:", gitExe, args)
 	}
-	syscall.Exec("/usr/bin/git", fullArgs, os.Environ())
+	cmd := exec.Command(gitExe, args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	return cmd
+}
+
+func findGit() (string, error) {
+	return exec.LookPath("git")
+}
+
+func dirIsEmpty(name string) (bool, error) {
+	f, err := os.Open(name)
+	if err != nil {
+		return false, err
+	}
+	defer f.Close()
+
+	_, err = f.Readdirnames(1) // Or f.Readdir(1)
+	if err == io.EOF {
+		return true, nil
+	}
+	return false, err // Either not empty or error, suits both cases
+}
+
+func rmDir(path string) error {
+	if verbose {
+		log.Printf("rmDir?: %s\n", path)
+	}
+
+	if ok, _ := dirIsEmpty(path); ok {
+		if verbose {
+			log.Printf("Removing %s\n", path)
+		}
+		return os.Remove(path)
+	}
+
+	return nil
+}
+
+func runOrExit(cmd *exec.Cmd) *exitStatusError {
+	if err := cmd.Start(); err != nil {
+		log.Fatalf("cmd.Start: %v")
+	}
+
+	if err := cmd.Wait(); err != nil {
+		if exiterr, ok := err.(*exec.ExitError); ok {
+			// The program has exited with an exit code != 0
+
+			// This works on both Unix and Windows. Although package
+			// syscall is generally platform dependent, WaitStatus is
+			// defined for both Unix and Windows and in both cases has
+			// an ExitStatus() method with the same signature.
+			if status, ok := exiterr.Sys().(syscall.WaitStatus); ok {
+				return &exitStatusError{exiterr, status.ExitStatus()}
+			}
+		} else {
+			return &exitStatusError{exiterr, 1}
+		}
+	}
+
+	return nil
 }
 
 func main() {
+	if verbose {
+		log.Println("Starting...")
+	}
+	gitExe, err := findGit()
+
+	if err != nil {
+		log.Fatalf("Could not find git executable: %s\n", err)
+	}
 
 	// if len(sys.argv) <= 1:
 	// 	os.execlp("git", "git")
 
 	if len(os.Args) <= 1 {
-		runGit()
+		exitErr := runOrExit(gitCmd(gitExe, []string{}))
+		if nil != exitErr {
+			exitErr.exit()
+		}
 	}
 
 	/// repo = str(sys.argv[-1])
@@ -59,7 +144,10 @@ func main() {
 	/// if "/" not in repo:
 	/// 	os.execlp("git", "git")
 	if !strings.Contains(repo, "/") {
-		runGit()
+		exitErr := runOrExit(gitCmd(gitExe, []string{}))
+		if exitErr != nil {
+			exitErr.exit()
+		}
 	}
 
 	host := os.Getenv("GIT_GET_HOST")
@@ -67,7 +155,7 @@ func main() {
 		host = "github.com"
 	}
 
-	verbose = os.Getenv("GIT_GET_VERBOSE") != ""
+	verbose = (strings.TrimSpace(os.Getenv("GIT_GET_VERBOSE")) != "") || verbose
 
 	path := os.Getenv("GIT_GET_PATH")
 	if path == "" {
@@ -120,7 +208,7 @@ func main() {
 	if verbose {
 		log.Println("Using target dir:", targetDir)
 	}
-	err := os.MkdirAll(targetDir, os.ModePerm)
+	err = os.MkdirAll(targetDir, os.ModePerm)
 	if nil != err {
 		log.Fatal(err)
 	}
@@ -134,5 +222,24 @@ func main() {
 	/// 		raise
 	///
 	/// os.execlp("git", "git", "clone", repo, target_dir)
-	runGit("clone", repo, targetDir)
+	exitErr := runOrExit(gitCmd(gitExe, []string{"clone", repo, targetDir}))
+
+	if exitErr != nil {
+		// Cleanup dir if empty
+
+		// repo dir
+		dir := targetDir
+		rmDir(dir)
+
+		// user dir
+		dir = filepath.Dir(targetDir)
+		rmDir(dir)
+
+		// host dir
+		dir = filepath.Dir(targetDir)
+		rmDir(dir)
+		exitErr.exit()
+	}
+
+	log.Println("Ended...")
 }
