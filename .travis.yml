@@ -1,4 +1,5 @@
 language: go
+before_deploy: go build
 deploy:
   provider: releases
   api_key:
