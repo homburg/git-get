@@ -241,5 +241,7 @@ func main() {
 		exitErr.exit()
 	}
 
-	log.Println("Ended...")
+	if verbose {
+		log.Println("Ended...")
+	}
 }
