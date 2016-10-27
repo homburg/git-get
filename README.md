@@ -16,13 +16,13 @@ $ git get homburg/tree
 ## INSTALLATION
 
 ```bash
-$ go get git@github.com:homburg/git-get
+$ go get github.com/homburg/git-get
 ```
 
 ## UPDATE
 
 ```bash
-$ go get -u git@github.com:homburg/git-get
+$ go get -u github.com/homburg/git-get
 ```
 
 ## USAGE
@@ -41,6 +41,10 @@ $ git get github.com:homburg/tree
 # or
 
 $ git get homburg/tree
+
+# or https
+
+$ git get https://github.com/homburg/tree
 ```
 
 ## OPTIONS

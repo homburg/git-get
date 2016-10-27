@@ -114,6 +114,51 @@ func runOrExit(cmd *exec.Cmd) *exitStatusError {
 	return nil
 }
 
+func hasScheme(repoAddress string) bool {
+	return strings.Contains(repoAddress, "://")
+}
+
+func parseRepo(repo, host string) (string, []string) {
+	repo = strings.TrimSuffix(repo, ".git")
+
+	var repoParts []string
+	if strings.Count(repo, ":") == 1 {
+		/// if "@" in repo:
+		if strings.Contains(repo, "@") {
+			///	repo_parts = repo[repo.find("@")+1:].replace(":", "/").split("/")
+			repoParts = strings.Split(strings.Replace(repo[strings.Index(repo, "@")+1:len(repo)], ":", "/", -1), "/")
+		} else {
+			///	repo_parts = repo.replace(":", "/").split("/")
+			repoParts = strings.Split(strings.Replace(repo, ":", "/", -1), "/")
+			///	repo = "git@" + repo
+			repo = "git@" + repo
+		}
+		repo = repo + ".git"
+		/// elif repo.count("/") == 1:
+	} else {
+		///	# Something from default host
+		repoParts = []string{host}
+		repoParts = append(repoParts, strings.Split(repo, "/")...)
+
+		repo = fmt.Sprintf("git@%s:%s.git", host, repo)
+		if verbose {
+			log.Println("Did build repo:", repo)
+		}
+	}
+
+	return repo, repoParts
+}
+
+/// Parse and split repo to path segments for repo address with scheme
+/// https://github.com/some/thing.git -> []string{"github.com", "some", "thing"}
+///
+/// Input is guaranteed to contains "://"
+func parseRepoWithScheme(repo string) []string {
+	repo = strings.TrimSuffix(repo, ".git")
+	parts := strings.SplitN(repo, "://", 2)
+	return strings.Split(parts[1], "/")
+}
+
 func main() {
 	if verbose {
 		log.Println("Starting...")
@@ -136,10 +181,6 @@ func main() {
 
 	/// repo = str(sys.argv[-1])
 	repo := os.Args[len(os.Args)-1]
-
-	/// if repo.endswith(".git"):
-	/// 	repo = repo[:-4]
-	repo = strings.TrimSuffix(repo, ".git")
 
 	/// if "/" not in repo:
 	/// 	os.execlp("git", "git")
@@ -171,36 +212,12 @@ func main() {
 	}
 
 	var repoParts []string
-	/// if repo.count(":") == 1:
-	if strings.Count(repo, ":") == 1 {
-		/// if "@" in repo:
-		if strings.Contains(repo, "@") {
-			///	repo_parts = repo[repo.find("@")+1:].replace(":", "/").split("/")
-			repoParts = strings.Split(strings.Replace(repo[strings.Index(repo, "@")+1:len(repo)], ":", "/", -1), "/")
-		} else {
-			///	repo_parts = repo.replace(":", "/").split("/")
-			repoParts = strings.Split(strings.Replace(repo, ":", "/", -1), "/")
-			///	repo = "git@" + repo
-			repo = "git@" + repo
-		}
-		/// elif repo.count("/") == 1:
-	} else if strings.Count(repo, "/") == 1 {
-		///	# Something from github
-		///	repo_parts = ["github.com"] + repo.split("/")
-		repoParts = []string{host}
-		repoParts = append(repoParts, strings.Split(repo, "/")...)
-		/// repo = "git@github.com:%s.git" % repo
-		repo = fmt.Sprintf("git@%s:%s.git", host, repo)
-		if verbose {
-			log.Println("Did build repo:", repo)
-		}
+	if hasScheme(repo) {
+		// https://github.com/some/thing -> []string{"github.com", "some", "thing"}
+		repoParts = parseRepoWithScheme(repo)
+	} else {
+		repo, repoParts = parseRepo(repo, host)
 	}
-
-	/// else:
-	/// 	# http repo?
-	/// 	print("TODO...")
-	/// 	exit(1)
-	///
 
 	targetDir := filepath.Join(repoParts...)
 	targetDir = filepath.Join(path, targetDir)
