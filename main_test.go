@@ -51,7 +51,7 @@ func TestRepoHasScheme(t *testing.T) {
 
 	for addr, expected := range testData {
 		if hasScheme(addr) != expected {
-			t.Errorf(`Expected scheme presence: %q for "%s", got %q.`, expected, addr, !expected)
+			t.Errorf(`Expected scheme presence: %t for "%s", got %t.`, expected, addr, !expected)
 		}
 	}
 }
@@ -75,27 +75,21 @@ func TestParseRepo(t *testing.T) {
 			"git@gitgit.git:github.com/homburg/stick.git",
 			[]string{"gitgit.git", "github.com", "homburg", "stick"},
 		},
+		"https://github.com/some/thing.git": {
+			"https://github.com/some/thing",
+			[]string{"github.com", "some", "thing"},
+		},
+		"http://some.where/test/it": {
+			"http://some.where/test/it",
+			[]string{"some.where", "test", "it"},
+		},
 	}
 
 	for repo, result := range testData {
-		parsedRepo, repoParts := parseRepo(repo, "gitgit.git")
+		parsedRepo, repoParts := repoParsers.parse(repo, "gitgit.git")
 
 		if !reflect.DeepEqual(result, parseRepoPair{parsedRepo, repoParts}) {
 			t.Errorf(`Expected repo: %s, and repo parts: %q, got repo: %s and repo parts: %q.`, result.repo, result.repoParts, parsedRepo, repoParts)
-		}
-	}
-}
-
-func TestParseRepoWithScheme(t *testing.T) {
-	testData := map[string][]string{
-		"https://github.com/some/thing.git": []string{"github.com", "some", "thing"},
-		"http://some.where/test/it":         []string{"some.where", "test", "it"},
-	}
-
-	for repo, parts := range testData {
-		repoParts := parseRepoWithScheme(repo)
-		if !reflect.DeepEqual(repoParts, parts) {
-			t.Errorf(`Expected repo parts: %q for repo with scheme, got: %q`, parts, repoParts)
 		}
 	}
 }
