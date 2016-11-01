@@ -20,15 +20,17 @@ func init() {
 
 type repoParserList []repoParser
 
-/// Apply the first matching repo parser
-func (r repoParserList) parse(repo, host string) (string, []string) {
+/// Apply the first matching repo parser, otherwise return false
+/// as first return value
+func (r repoParserList) parse(repo, host string) (handled bool, parsedRepo string, repoParts []string) {
 	for _, parser := range r {
 		if parser.test(repo) {
-			return parser.parse(repo, host)
+			parsedRepo, repoParts = parser.parse(repo, host)
+			return true, parsedRepo, repoParts
 		}
 	}
 
-	return repo, []string{}
+	return false, repo, []string{}
 }
 
 /// Prioritized list of repo parsers
@@ -56,11 +58,11 @@ func main() {
 		}
 	}
 
-	repo := os.Args[len(os.Args)-1]
+	rawRepo := os.Args[len(os.Args)-1]
 
 	// Repo address must contains at least one "/"
 	// otherwise run git and quit
-	if !strings.Contains(repo, "/") {
+	if !strings.Contains(rawRepo, "/") {
 		exitErr := runOrExit(gitCmd(gitExe, []string{}))
 		if exitErr != nil {
 			exitErr.exit()
@@ -83,10 +85,14 @@ func main() {
 		log.Println("Using base:", path)
 	}
 
-	repo = strings.TrimSuffix(repo, ".git")
+	repo := strings.TrimSuffix(rawRepo, ".git")
 
 	// Find the right parser for the repo address
-	repo, repoParts := repoParsers.parse(repo, host)
+	handled, repo, repoParts := repoParsers.parse(repo, host)
+
+	if !handled {
+		log.Fatalf(`Could not parse repo address: "%s".`, rawRepo)
+	}
 
 	targetDir := filepath.Join(repoParts...)
 	targetDir = filepath.Join(path, targetDir)

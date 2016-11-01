@@ -86,7 +86,7 @@ func TestParseRepo(t *testing.T) {
 	}
 
 	for repo, result := range testData {
-		parsedRepo, repoParts := repoParsers.parse(repo, "gitgit.git")
+		_, parsedRepo, repoParts := repoParsers.parse(repo, "gitgit.git")
 
 		if !reflect.DeepEqual(result, parseRepoPair{parsedRepo, repoParts}) {
 			t.Errorf(`Expected repo: %s, and repo parts: %q, got repo: %s and repo parts: %q.`, result.repo, result.repoParts, parsedRepo, repoParts)
