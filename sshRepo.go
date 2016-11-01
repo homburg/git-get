@@ -11,20 +11,22 @@ var sshRepoParser repoParser = repoParser{
 
 func parseSshRepo(repo, host string) (string, []string) {
 
-	var repoParts []string
+	// <user>@github.com/...
+	hasUser := strings.Contains(repo, "@")
 
-	/// if "@" in repo:
-	if strings.Contains(repo, "@") {
-		///	repo_parts = repo[repo.find("@")+1:].replace(":", "/").split("/")
-		repoParts = strings.Split(strings.Replace(repo[strings.Index(repo, "@")+1:len(repo)], ":", "/", -1), "/")
+	var repoWithoutUser string
+	if hasUser {
+		repoWithoutUser = repo[strings.Index(repo, "@")+1 : len(repo)]
 	} else {
-		///	repo_parts = repo.replace(":", "/").split("/")
-		repoParts = strings.Split(strings.Replace(repo, ":", "/", -1), "/")
-		///	repo = "git@" + repo
+		repoWithoutUser = repo
 		repo = "git@" + repo
 	}
+
+	repoPath := strings.Replace(repoWithoutUser, ":", "/", -1)
+
+	repoParts := strings.Split(repoPath, "/")
+
 	repo = repo + ".git"
-	/// elif repo.count("/") == 1:
 
 	return repo, repoParts
 }
