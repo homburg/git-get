@@ -27,7 +27,7 @@ func TestDirIsEmpty(t *testing.T) {
 	}
 
 	if !ok {
-		t.Fatalf(`Expected %s to be empty, was not.`, path)
+		t.Errorf(`Expected %s to be empty, was not.`, path)
 	}
 
 	parent := filepath.Dir(path)
@@ -38,7 +38,7 @@ func TestDirIsEmpty(t *testing.T) {
 	}
 
 	if ok {
-		t.Fatalf(`Expected %s not to be empty, was.`, parent)
+		t.Errorf(`Expected %s not to be empty, was.`, parent)
 	}
 }
 
@@ -51,7 +51,7 @@ func TestRepoHasScheme(t *testing.T) {
 
 	for addr, expected := range testData {
 		if hasScheme(addr) != expected {
-			t.Fatalf(`Expected scheme presence: %q for "%s", got %q.`, expected, addr, !expected)
+			t.Errorf(`Expected scheme presence: %q for "%s", got %q.`, expected, addr, !expected)
 		}
 	}
 }
@@ -81,7 +81,7 @@ func TestParseRepo(t *testing.T) {
 		parsedRepo, repoParts := parseRepo(repo, "gitgit.git")
 
 		if !reflect.DeepEqual(result, parseRepoPair{parsedRepo, repoParts}) {
-			t.Fatalf(`Expected repo: %s, and repo parts: %q, got repo: %s and repo parts: %q.`, result.repo, result.repoParts, parsedRepo, repoParts)
+			t.Errorf(`Expected repo: %s, and repo parts: %q, got repo: %s and repo parts: %q.`, result.repo, result.repoParts, parsedRepo, repoParts)
 		}
 	}
 }
@@ -95,7 +95,7 @@ func TestParseRepoWithScheme(t *testing.T) {
 	for repo, parts := range testData {
 		repoParts := parseRepoWithScheme(repo)
 		if !reflect.DeepEqual(repoParts, parts) {
-			t.Fatalf(`Expected repo parts: %q for repo with scheme, got: %q`, parts, repoParts)
+			t.Errorf(`Expected repo parts: %q for repo with scheme, got: %q`, parts, repoParts)
 		}
 	}
 }
