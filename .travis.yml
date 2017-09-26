@@ -10,3 +10,13 @@ install:
 
 script:
     - go build -v ./...
+
+deploy:
+  skip_cleanup: true
+  provider: releases
+  api_key:
+    secure: mTgBgHo6FONIn7jAk/qVfhV2qPHA31U1J9YlNYs1qMmWwF9QjFGwU/ucfzYDGXLVFUUXL5j8oHRBPsvjyCUuiBEk3CMq6CatFgmSxeb/VBjLY3sqVC8ZKzNL5vXxw1wt6+d6VERERsfFWqnJz/nuWgzQeHJOwM8j9Gb0P/I+ndI=
+  file: git-get
+  on:
+    repo: homburg/git-get
+    tags: true
