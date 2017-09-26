@@ -15,6 +15,11 @@ $ git get homburg/tree
 
 ## INSTALLATION
 
+Download binary for your platform from [GitHub Releases](https://github.com/homburg/git-get/releases)
+and extract to somewhere in `$PATH`, eg. `~/bin`.
+
+or build (requires go installed):
+
 ```bash
 $ go get github.com/homburg/git-get
 ```
