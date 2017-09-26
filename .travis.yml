@@ -11,7 +11,7 @@ install:
 
 script:
   - go build -v ./...
-  - zip git-get-${GIMME_OS}-${GIMME_ARCH}.zip git-get
+  - zip git-get-${GIMME_OS}-${GIMME_ARCH}-${TRAVIS_TAG}.zip git-get
   - tar czvf git-get-${GIMME_OS}-${GIMME_ARCH}-${TRAVIS_TAG}.tar.gz git-get
 
 deploy:
