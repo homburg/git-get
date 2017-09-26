@@ -21,4 +21,4 @@ deploy:
   file: git-get*.zip
   on:
     repo: homburg/git-get
-    # tags: true
+    tags: true
