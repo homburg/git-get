@@ -25,3 +25,4 @@ deploy:
     - git-get*.tar.gz
   on:
     repo: homburg/git-get
+    tags: true
