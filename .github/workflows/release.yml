@@ -15,6 +15,15 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@master
 
+      - name: Set up Snapcraft
+        run: snap install snapcraft --classic
+
+      - name: Set up Snapcraft login
+        run: echo ${{ secrets.SNAPCRAFT_LOGIN }} | base64 -d > snap.login
+
+      - name: Login to snapcraft
+        run: snapcraft login --with snap.login
+
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@master
         env:
