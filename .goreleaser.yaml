@@ -17,7 +17,9 @@ scoop:
   license: MIT
 snapcrafts:
   - name_template: "{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
-    summary: Clone git repositories to $HOME/src/github.com/<user>/<repo>
+    summary: Clone git repositories to standard folder tree
+    description: |
+      Clone git repositories to $HOME/src/github.com/<user>/<repo>
     grade: stable
     confinement: classic
     publish: true
