@@ -15,13 +15,13 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@master
 
-      - name: Set up Snapcraft
-        run: sudo snap install snapcraft --classic
+      # - name: Set up Snapcraft
+      #   run: sudo snap install snapcraft --classic
 
-      - name: Login to Snapcraft
-        env:
-          SNAPCRAFT_LOGIN: ${{ secrets.SNAPCRAFT_LOGIN }}
-        run: sudo sh ./scripts/snapcraft-login.sh
+      # - name: Login to Snapcraft
+      #   env:
+      #     SNAPCRAFT_LOGIN: ${{ secrets.SNAPCRAFT_LOGIN }}
+      #   run: sudo sh ./scripts/snapcraft-login.sh
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@master
