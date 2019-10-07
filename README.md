@@ -1,24 +1,27 @@
 # GIT-GET
 
-[![asciicast](https://asciinema.org/a/13272.png)](https://asciinema.org/a/13272)
-
-Like `$ go get`. Clone to a default folder hierarchy, ie. shorthand for:
+Clone git repositories to `$HOME/src/github.com/<user>/<repo>`
 
 ```bash
-$ mkdir -p $HOME/github.com/homburg
-$ git clone git@github.com:homburg/tree.git $HOME/github.com/homburg/tree
+git get homburg/tree
 
-# instead
-
-$ git get homburg/tree
+# Cloned to $HOME/src/github.com/homburg/tree/
 ```
 
 ## INSTALLATION
 
-Download binary for your platform from [GitHub Releases](https://github.com/homburg/git-get/releases)
+### Homebrew
+
+```bash
+brew install homburg/tap/git-get
+```
+
+### Download binary
+
+Download a binary for your platform from [GitHub Releases](https://github.com/homburg/git-get/releases)
 and extract to somewhere in `$PATH`, eg. `~/bin`.
 
-or build (requires go installed):
+### `go get`
 
 ```bash
 $ go get github.com/homburg/git-get
@@ -26,51 +29,53 @@ $ go get github.com/homburg/git-get
 
 ## UPDATE
 
+### Homebrew
+
 ```bash
-$ go get -u github.com/homburg/git-get
+brew upgrade homburg/tap/git-get
 ```
 
 ## USAGE
 
-Clone to your regular clone dir:
-
 ```bash
-$ git get git@github.com:homburg/tree.git
-# -> mkdir -p ~/src/github.com/homburg
-# -> git clone git@github.com:homburg/tree.git $HOME/src/github.com/homburg/tree
+git get git@github.com:homburg/tree.git
 
 # or
 
-$ git get github.com:homburg/tree
+git get github.com:homburg/tree
 
 # or
 
-$ git get homburg/tree
+git get bitbucket.org:hombotto/git-get
+
+# or
+
+git get homburg/tree
 
 # or https
 
-$ git get https://github.com/homburg/tree
+git get https://github.com/homburg/tree
 ```
 
 ## OPTIONS
 
-### GIT\_GET\_PATH
+### GIT_GET_PATH
 
 ```bash
-$ GIT_GET_PATH="$HOME/src"
+export GIT_GET_PATH="$HOME/src"
 # default: $HOME/src
 
-$ git get homburg/tree 
+git get homburg/tree
 # -> $HOME/src/github.com/homburg/tree
 ```
 
-### GIT\_GET\_HOST
+### GIT_GET_HOST
 
 ```bash
-$ GIT_GET_HOST="bitbucket.org"
+GIT_GET_HOST="bitbucket.org"
 # default: github.com
 
-$ git get homburg/tree
+git get homburg/tree
 # -> $HOME/src/bitbucket.org/homburg/tree
 ```
 
@@ -89,7 +94,7 @@ $ git get homburg/tree
 ```
 The MIT License (MIT)
 
-Copyright (c) 2014 Thomas B Homburg
+Copyright (c) 2019 Thomas B Homburg
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the Software), to deal
@@ -109,5 +114,3 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
-
-...
