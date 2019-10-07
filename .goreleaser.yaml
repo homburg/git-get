@@ -9,6 +9,8 @@ brews:
       name: homebrew-tap
     folder: Formula
     description: Clone git repositories to $HOME/src/github.com/<user>/<repo>
+    dependencies:
+      - git
 scoop:
   bucket:
     owner: homburg

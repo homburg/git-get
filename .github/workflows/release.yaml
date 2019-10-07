@@ -1,7 +1,8 @@
 name: goreleaser
 
+# Build on tags on master
 on:
-  push:
+  create:
     branches:
       - master
 
