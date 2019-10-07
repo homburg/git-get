@@ -1,8 +1,8 @@
 # http://goreleaser.com
 archives:
-  format_overrides:
-    - goos: windows
-      format: zip
+  - format_overrides:
+      - goos: windows
+        format: zip
 brews:
   - github:
       owner: homburg
