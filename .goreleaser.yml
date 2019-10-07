@@ -1,0 +1,20 @@
+# http://goreleaser.com
+builds:
+- env:
+  - CGO_ENABLED=0
+  - GO111MODULE=on
+  goos:
+    - darwin
+    - linux
+    - windows
+    - android
+  goarch:
+    - amd64
+    - arm
+    - arm64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
