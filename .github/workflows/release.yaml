@@ -18,10 +18,7 @@ jobs:
       - name: Set up Snapcraft
         run: sudo snap install snapcraft --classic
 
-      - name: Set up Snapcraft login
-        shell: bash
-
-      - name: Login to snapcraft
+      - name: Login to Snapcraft
         env:
           SNAPCRAFT_LOGIN: ${{ secrets.SNAPCRAFT_LOGIN }}
         run: sh ./scripts/snapcraft-login.sh
