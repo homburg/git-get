@@ -1,0 +1,41 @@
+# http://goreleaser.com
+archives:
+  format_overrides:
+    - goos: windows
+      format: zip
+brews:
+  - github:
+      owner: homburg
+      name: homebrew-tap
+    folder: Formula
+    description: Clone git repositories to $HOME/src/github.com/<user>/<repo>
+scoop:
+  bucket:
+    owner: homburg
+    name: scoop-bucket
+  description: Clone git repositories to $HOME/src/github.com/<user>/<repo>
+  license: MIT
+snapcrafts:
+  - name_template: "{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
+    summary: Clone git repositories to $HOME/src/github.com/<user>/<repo>
+    grade: stable
+    confinement: classic
+    publish: true
+builds:
+  - env:
+      - CGO_ENABLED=0
+      - GO111MODULE=on
+    goos:
+      - darwin
+      - linux
+      - windows
+    goarch:
+      - amd64
+      - arm
+      - arm64
+checksum:
+  name_template: "checksums.txt"
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
