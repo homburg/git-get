@@ -21,7 +21,7 @@ jobs:
       - name: Login to Snapcraft
         env:
           SNAPCRAFT_LOGIN: ${{ secrets.SNAPCRAFT_LOGIN }}
-        run: sh ./scripts/snapcraft-login.sh
+        run: sudo sh ./scripts/snapcraft-login.sh
 
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@master
