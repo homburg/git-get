@@ -19,7 +19,7 @@ jobs:
         run: sudo snap install snapcraft --classic
 
       - name: Set up Snapcraft login
-        run: echo ${{ secrets.SNAPCRAFT_LOGIN }} | base64 -d > snap.login
+        run: "echo ${{ secrets.SNAPCRAFT_LOGIN }} | base64 -d > snap.login"
 
       - name: Login to snapcraft
         run: snapcraft login --with snap.login
