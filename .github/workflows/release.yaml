@@ -1,8 +1,6 @@
 name: goreleaser
 
 on:
-  workflow_dispatch:
-  push:
   create:
     branches:
       - main
