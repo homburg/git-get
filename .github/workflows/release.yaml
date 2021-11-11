@@ -18,7 +18,7 @@ jobs:
       - name: Run GoReleaser
         uses: goreleaser/goreleaser-action@v2
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_RELEASE_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GORELEASER_GITHUB_TOKEN }}
         with:
           version: latest
           args: release
