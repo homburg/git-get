@@ -43,3 +43,5 @@ snapshot:
   name_template: "{{ .Tag }}-next"
 changelog:
   sort: asc
+universal_binaries:
+- replace: true
