@@ -2,6 +2,7 @@ name: goreleaser
 
 # Build on tags on master
 on:
+  workflow_dispatch:
   create:
     branches:
       - master
