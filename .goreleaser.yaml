@@ -11,12 +11,12 @@ brews:
     description: Clone git repositories to $HOME/src/github.com/<user>/<repo>
     dependencies:
       - git
-scoop:
-  repository:
-    owner: homburg
-    name: scoop-bucket
-  description: Clone git repositories to $HOME/src/github.com/<user>/<repo>
-  license: MIT
+scoops:
+  - repository:
+      owner: homburg
+      name: scoop-bucket
+    description: Clone git repositories to $HOME/src/github.com/<user>/<repo>
+    license: MIT
 # snapcrafts:
 #   - name_template: "{{ .ProjectName }}_{{ .Arch }}{{ if .Arm }}v{{ .Arm }}{{ end }}"
 #     summary: Clone git repositories to standard folder tree
