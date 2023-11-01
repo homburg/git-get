@@ -21,4 +21,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GORELEASER_GITHUB_TOKEN }}
         with:
           version: latest
-          args: release
+          args: release --clean --snaphost
