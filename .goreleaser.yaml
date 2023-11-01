@@ -4,7 +4,7 @@ archives:
       - goos: windows
         format: zip
 brews:
-  - tap:
+  - repository:
       owner: homburg
       name: homebrew-tap
     folder: Formula
@@ -12,7 +12,7 @@ brews:
     dependencies:
       - git
 scoop:
-  bucket:
+  repository:
     owner: homburg
     name: scoop-bucket
   description: Clone git repositories to $HOME/src/github.com/<user>/<repo>
